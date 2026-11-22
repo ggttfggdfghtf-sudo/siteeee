@@ -198,9 +198,8 @@ body::before{content:"";position:fixed;inset:0;z-index:100;pointer-events:none;o
 .st b{color:var(--ink);opacity:.18}
 .case,.oc,.tm{border-color:var(--line2)}
 .oc .av,.prof .pt img{box-shadow:0 0 0 3px #0b0a08,0 0 0 4px rgba(246,241,230,.45)}
-.vis img,.tm img,.oc .av,.prof img{filter:grayscale(1) contrast(1.06) brightness(.97);transition:filter .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
-.case:hover .vis img,.tm:hover img,.case:hover .prof img,.oc:hover .av{filter:none}
-.big{background-size:220% 100%;background-image:linear-gradient(100deg,#b8892a 0%,#e2b94f 30%,#fff3cf 42%,#e2b94f 54%,#b0852a 100%);background-position:100% 0;animation:sheen 2.4s cubic-bezier(.3,.1,.2,1) 2.9s 1 both}
+
+.big{background-size:220% 100%;background-image:linear-gradient(100deg,#b8892a 0%,#e2b94f 30%,#fff3cf 42%,#e2b94f 54%,#b0852a 100%);background-position:100% 0;animation:sheen 1.8s cubic-bezier(.3,.1,.2,1) 1.2s 1 both}
 @keyframes sheen{from{background-position:100% 0}to{background-position:0% 0}}
 @media(max-width:960px){.steps{border-top:0}.st{border-top:1px solid rgba(246,241,230,.35)}}
 @media(prefers-reduced-motion:reduce){.big{animation:none;background-position:30% 0}}
@@ -211,6 +210,17 @@ body::before{content:"";position:fixed;inset:0;z-index:100;pointer-events:none;o
 .wk i::after{content:"";position:absolute;inset:0;border-radius:3px;background:linear-gradient(90deg,#b8892a,#f6e3a6);transform:scaleX(var(--f,1));transform-origin:left}
 .wk .wl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:8px;font-size:13px;color:var(--mute)}
 @media(max-width:640px){.wk .wl span:nth-child(2),.wk .wl span:nth-child(3){visibility:hidden}.wk .wl span:last-child{text-align:right}}
+
+.steps{position:relative}
+.steps .prog{position:absolute;left:0;top:-1px;height:2px;width:0;background:linear-gradient(90deg,#b8892a,#f6e3a6);box-shadow:0 0 12px rgba(226,185,79,.6);z-index:1;pointer-events:none}
+.steps.go .prog{animation:prog 3.2s linear forwards}
+@keyframes prog{0%{width:0}14%{width:25%}28%{width:25%}42%{width:50%}56%{width:50%}70%{width:75%}84%{width:75%}100%{width:100%}}
+.st::before{z-index:2;transition:background .3s,box-shadow .3s,transform .3s}
+.st.on::before{background:var(--gold);box-shadow:0 0 0 5px var(--bg2),0 0 14px rgba(226,185,79,.8);transform:scale(1.35)}
+.st b{transition:color .4s,opacity .4s}
+.st.on b{opacity:.55;color:var(--gold)}
+@media(max-width:960px){.steps .prog{display:none}}
+@media(prefers-reduced-motion:reduce){.steps .prog{width:100%;animation:none}}
 </style>
 </head>
 <body>
@@ -313,9 +323,10 @@ document.getElementById('cases').innerHTML=cases.map((c,i)=>`<article class="cas
 const did=['Анкета для знакомства с аудиторией','Закрытый Telegram-канал «За кадром»','Гайд-сайт как лид-магнит','Курс из трёх эфиров на GetCourse','Аудит-созвоны с подписчицами','Личное сопровождение «Лично с Машей»'];
 document.getElementById('mashaList').innerHTML=did.map((d,i)=>`<li><span>0${i+1}</span>${d}</li>`).join('');
 const steps=[['Анализ','Изучение ниши, аудитории и текущего положения проекта. Определение возможностей и точек роста.'],['Продукт','Формирование идеи, разработка структуры, программы и предложения для аудитории.'],['Контент','Подготовка стратегии контента, сценариев, материалов и коммуникации с аудиторией.'],['Запуск','Организация продаж, настройка необходимых процессов и сопровождение запуска.']];
-document.getElementById('steps').innerHTML=steps.map((s,i)=>`<div class="st"><b>0${i+1}</b><h3>${s[0]}</h3><p>${s[1]}</p></div>`).join('');
+document.getElementById('steps').innerHTML='<span class="prog"></span>'+steps.map((s,i)=>`<div class="st"><b>0${i+1}</b><h3>${s[0]}</h3><p>${s[1]}</p></div>`).join('');
 const bigEl=document.querySelector('.big'),wkI=[...document.querySelectorAll('.wk i')];
-if(bigEl&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const tn=bigEl.firstChild;const end=1080000,d=2600;const fmt=n=>n.toLocaleString('ru-RU').replace(/[\u00a0\u202f]/g,' ')+'\u00a0';tn.textContent=fmt(0);wkI.forEach(i=>i.style.setProperty('--f',0));let t0=null;const step=t=>{if(t0===null)t0=t+300;const k=Math.max(0,Math.min(1,(t-t0)/d));const e=1-(1-k)**3;tn.textContent=fmt(Math.round(end*e/1000)*1000);wkI.forEach((i,n)=>i.style.setProperty('--f',Math.max(0,Math.min(1,e*4-n))));if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
+if(bigEl&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const tn=bigEl.firstChild;const end=1080000,d=1000;const fmt=n=>n.toLocaleString('ru-RU').replace(/[\u00a0\u202f]/g,' ')+'\u00a0';tn.textContent=fmt(0);wkI.forEach(i=>i.style.setProperty('--f',0));let t0=null;const step=t=>{if(t0===null)t0=t+150;const k=Math.max(0,Math.min(1,(t-t0)/d));const e=1-(1-k)**3;tn.textContent=fmt(Math.round(end*e/1000)*1000);wkI.forEach((i,n)=>i.style.setProperty('--f',Math.max(0,Math.min(1,e*4-n))));if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
+{const sEl=document.getElementById('steps'),sts=[...sEl.querySelectorAll('.st')];const run=()=>{if(sEl.classList.contains('go'))return;sEl.classList.add('go');const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;[0,.28,.56,.84].forEach((f,i)=>setTimeout(()=>sts[i]&&sts[i].classList.add('on'),rm?0:f*3200+(i?0:100)))};if('IntersectionObserver' in window){const so=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){run();so.disconnect()}},{threshold:.4});so.observe(sEl)}else run()}
 document.getElementById('yr').textContent=new Date().getFullYear();
 const nav=document.getElementById('nav'),links=document.getElementById('links'),mb=document.getElementById('mb');
 mb.addEventListener('click',()=>{const o=links.classList.toggle('open');mb.setAttribute('aria-expanded',o);mb.textContent=o?'Закрыть':'Меню'});
